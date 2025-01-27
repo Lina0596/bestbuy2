@@ -1,4 +1,5 @@
 import products
+import promotions
 
 
 class Store:
@@ -31,21 +32,35 @@ class Store:
     def order(self, shopping_list):
         price = 0
         for i in range(len(shopping_list)):
-            price += products.Product.buy(shopping_list[i][0], shopping_list[i][1])
-        return price
+            price += type(shopping_list[i][0]).buy(shopping_list[i][0], shopping_list[i][1])
+        return f"${price}"
 
 
 def main():
+    # setup initial stock of inventory
     product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
                     products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
                     products.Product("Google Pixel 7", price=500, quantity=250),
+                    products.NonStockedProduct("Windows License", price=125),
+                    products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
                     ]
+
+    # Create promotion catalog
+    second_half_price = promotions.SecondHalfPrice("Second Half price!")
+    third_one_free = promotions.ThirdOneFree("Third One Free!")
+    thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
+
+    # Add promotions to products
+    product_list[0].set_promotion(second_half_price)
+    product_list[1].set_promotion(third_one_free)
+    product_list[3].set_promotion(thirty_percent)
 
     store = Store(product_list)
     all_products = store.get_all_products()
-    print(store.get_all_products())
+    print(all_products)
     print(store.get_total_quantity())
-    print(store.order([(all_products[0], 1), (all_products[1], 2)]))
+    print(all_products[0])
+    print(store.order([(all_products[3], 6)]))
 
 
 if __name__ == "__main__":
