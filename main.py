@@ -4,16 +4,25 @@ import promotions
 
 
 def show_products(best_buy):
+    """
+    Displays all products in the store.
+    """
     products_in_store = best_buy.get_all_products()
     for i in range(len(products_in_store)):
         print(f"{i + 1}. {products_in_store[i].show()}")
 
 
 def show_total_amount(best_buy):
+    """
+    Displays the total amount of products in the store.
+    """
     print(store.Store.get_total_quantity(best_buy))
 
 
 def make_order(best_buy):
+    """
+    Creates a shopping list and makes an order.
+    """
     products_in_store = best_buy.get_all_products()
     shopping_list = []
     user_chose_product = True

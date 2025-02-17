@@ -3,6 +3,11 @@ import promotions
 class Product:
 
     def __init__(self, name, price, quantity):
+        """
+        Creates the instance variables of the Product class (active is set to True).
+        If something is invalid (empty name / negative price or quantity),
+        raises an exception.
+        """
         if name == "":
             raise ValueError("The name is empty.")
         else:
@@ -20,36 +25,63 @@ class Product:
 
 
     def get_quantity(self):
+        """
+        Gets the quantity of the product and returns it.
+        """
         return self.quantity
 
 
     def set_quantity(self, quantity):
+        """
+        Sets the quantity based on the given quantity parameter.
+        If quantity reaches 0, deactivates the product
+        """
         self.quantity += quantity
         if self.quantity == 0:
             self.deactivate()
 
 
     def is_active(self):
+        """
+        Checks if a product is active or not.
+        Returns True if the product is active, otherwise False.
+        """
         return self.active
 
 
     def activate(self):
+        """
+        Activates a product (sets the active status to True).
+        """
         self.active = True
 
 
     def deactivate(self):
+        """
+        Deactivates a product (sets the active status to False).
+        """
         self.active = False
 
 
     def get_promotion(self):
+        """
+        Gets the promotion of a product and returns it.
+        Returns None if there is no promotion.
+        """
         return self.promotion.name
 
 
     def set_promotion(self, promotion):
+        """
+        Sets the promotion.
+        """
         self.promotion = promotion
 
 
     def show(self):
+        """
+        Returns a string that represents the product.
+        """
         if self.promotion is None:
             return f"{self.name}, Price: ${self.price}, Quantity: {self.quantity}, Promotion: {self.promotion}"
         else:
@@ -57,6 +89,11 @@ class Product:
 
 
     def buy(self, quantity):
+        """
+        Updates the quantity and buys the given quantity of the product.
+        Returns the total price of the purchase.
+        Raises exception, if the quantity is larger than what exists.
+        """
         if (self.quantity - quantity) >= 0:
             self.set_quantity(-quantity)
             if self.promotion is None:
@@ -72,10 +109,18 @@ class Product:
 class NonStockedProduct(Product):
 
     def __init__(self, name, price, quantity=1):
+        """
+        Creates the instance variables of the NonStockedProduct subclass.
+        This class is for products, which are not physical and the quantity
+        doesn't have to be tracked.
+        """
         super().__init__(name, price, quantity)
 
 
     def show(self):
+        """
+        Returns a string that represents the product.
+        """
         if self.promotion is None:
             return f"{self.name}, Price: ${self.price}, Quantity: Unlimited, Promotion: {self.promotion}"
         else:
@@ -83,6 +128,11 @@ class NonStockedProduct(Product):
 
 
     def buy(self, quantity):
+        """
+        Updates the quantity and buys the given quantity of the product.
+        Returns the total price of the purchase.
+        Raises exception, if the quantity is larger than what exists.
+        """
         self.quantity += quantity
         return super().buy(quantity)
         
@@ -90,11 +140,18 @@ class NonStockedProduct(Product):
 class LimitedProduct(Product):
 
     def __init__(self, name, price, quantity, maximum=1):
+        """
+        Creates the instance variables of the LimitedProduct subclass.
+        This class is for products, which have a limited quantity of 1 per order.
+        """
         super().__init__(name, price, quantity)
         self.maximum = maximum
 
 
     def show(self):
+        """
+        Returns a string that represents the product.
+        """
         if self.promotion is None:
             return f"{self.name}, Price: ${self.price}, Quantity: Limited to 1 per order!, Promotion: {self.promotion}"
         else:
@@ -102,10 +159,12 @@ class LimitedProduct(Product):
 
 
     def buy(self, quantity):
-        if quantity == self.maximum:
-            return super().buy(quantity)
-        elif quantity > self.maximum:
-            raise ValueError("Error with your order! Only 1 is allowed from this product.")
+        """
+        Updates the quantity and buys the given quantity of the product.
+        Returns the total price of the purchase.
+        Raises exception, if the quantity is larger than what exists.
+        """
+        return super().buy(quantity)
 
 
 def main():

@@ -1,27 +1,44 @@
 import products
 import promotions
+from bestbuy.products import Product
 
 
 class Store:
 
 
     def __init__(self, product_list):
+        """
+        Creates the instance variables of the Store class.
+        """
         self.products = product_list
 
 
     def add_product(self, product):
+        """
+        Adds an object from a product class to the product list.
+        """
         self.products.append(product)
 
 
     def remove_product(self, product):
+        """
+        Removes product class object from the product list.
+        """
         self.products.remove(product)
 
 
     def get_total_quantity(self):
+        """
+        Gets the total quantity of items in the store and returns it.
+        """
         return f"There are {len(self.products)} items in the store."
 
 
     def get_all_products(self):
+        """
+        Creates a list with all active products
+        in the store and returns it.
+        """
         active_products = []
         for i in range(len(self.products)):
             if products.Product.is_active(self.products[i]):
@@ -30,10 +47,23 @@ class Store:
 
 
     def order(self, shopping_list):
+        """
+        Counts the total price of an order and buys
+        the products from the product list.
+        Returns the total price.
+        Checks if the quantity of limited products is one per order
+        and raise exception if not.
+        """
         price = 0
+        count_limited_products = 0
         for i in range(len(shopping_list)):
-            price += type(shopping_list[i][0]).buy(shopping_list[i][0], shopping_list[i][1])
-        return f"${price}"
+            if isinstance(shopping_list[i][0], products.LimitedProduct):
+                count_limited_products += shopping_list[i][1]
+                price += type(shopping_list[i][0]).buy(shopping_list[i][0], shopping_list[i][1])
+        if count_limited_products > 1:
+            raise ValueError(f"Error with your order!\nYou have a limited product with a quantity of {count_limited_products} in your order.\nOnly one per order is allowed.")
+        else:
+            return f"${price}"
 
 
 def main():
