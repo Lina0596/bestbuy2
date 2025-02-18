@@ -59,7 +59,7 @@ class Store:
         for i in range(len(shopping_list)):
             if isinstance(shopping_list[i][0], products.LimitedProduct):
                 count_limited_products += shopping_list[i][1]
-                price += type(shopping_list[i][0]).buy(shopping_list[i][0], shopping_list[i][1])
+            price += type(shopping_list[i][0]).buy(shopping_list[i][0], shopping_list[i][1])
         if count_limited_products > 1:
             raise ValueError(f"Error with your order!\nYou have a limited product with a quantity of {count_limited_products} in your order.\nOnly one per order is allowed.")
         else:
